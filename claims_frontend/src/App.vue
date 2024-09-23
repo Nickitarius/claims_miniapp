@@ -21,6 +21,7 @@ onMounted(() => {
 </script>
 
 <template>
+  
   <v-app>
     <div><BackButton @click="$router.go(-1)" /></div>
 

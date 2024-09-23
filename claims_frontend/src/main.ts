@@ -22,4 +22,6 @@ app.use(vuetify)
 
 app.use(VueTelegramPlugin);
 
+app.config.globalProperties.TWA = window.Telegram.WebApp
+
 app.mount('#app');

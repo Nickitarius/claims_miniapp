@@ -12,7 +12,8 @@ import { resolve } from 'node:path';
 export default defineConfig({
   plugins: [
     vue(),
-    basicSsl(),
+    // basicSsl(),
+    // mkcert(),
     Terminal({
       console: 'terminal',
       output: ['terminal', 'console'],
@@ -27,8 +28,13 @@ export default defineConfig({
     host: true,
     port: 3600,
     https: {
-      cert: readFileSync(resolve('./secrets/cert.crt')),
-      key: readFileSync(resolve('./secrets/cert.key')),
+      // cert: readFileSync(resolve('./secrets/full.chain.pem')),
+      // // cert: readFileSync(resolve('./secrets/cert.crt')),
+      // key: readFileSync(resolve('./secrets/cert.key')),
+
+      cert: readFileSync(resolve('./secrets/example.cert.pem')),
+      // cert: readFileSync(resolve('./secrets/cert.crt')),
+      key: readFileSync(resolve('./secrets/example.key.pem')),
     },
   },
 });
