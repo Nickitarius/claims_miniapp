@@ -13,9 +13,9 @@ import { Buttons } from './claims.buttons';
 import { ClaimsUtils } from './claims.utils';
 
 @Injectable()
-export class ClaimsService {
+export class ClaimsBotService {
   constructor(
-    readonly httpService: HttpService,
+    private readonly httpService: HttpService,
     @InjectBot() readonly bot: Telegraf<CustomContext>,
     private configService: ConfigService,
   ) {
@@ -23,8 +23,7 @@ export class ClaimsService {
     const port = this.configService.get('API_PORT');
     this.apiUrl = `http://${url}:${port}/claims`;
   }
-  private readonly logger = new Logger(ClaimsService.name);
-
+  private readonly logger = new Logger(ClaimsBotService.name);
   private readonly apiUrl;
 
   async getShortClaims(context: CustomContext) {

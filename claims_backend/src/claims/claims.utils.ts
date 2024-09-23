@@ -1,6 +1,7 @@
 import { Context, Markup } from 'telegraf';
 import { Buttons } from './claims.buttons';
 import { ConfigService } from '@nestjs/config';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class ClaimsUtils {
   /**
@@ -126,5 +127,22 @@ export class ClaimsUtils {
         replyMarkup,
       );
     }
+  }
+
+  static async handleReqError(error, uuidOne, uid, logger) {
+    console.log('ssss');
+    let errorMessage;
+
+    if (error.response) {
+      errorMessage =
+        `UUID: ${uuidOne}\nUSER_ID: ${uid}\n` +
+        `CODE: ${error.response.data.statusCode}\nDATA: ${JSON.stringify(error, null, 3)}`;
+    } else {
+      errorMessage = `UUID: ${uuidOne}\nUSER_ID: ${uid}\nCODE: ${error.code}`;
+    }
+
+    logger.error(errorMessage);
+
+    throw new HttpException(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

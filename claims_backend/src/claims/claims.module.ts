@@ -2,10 +2,13 @@ import { HttpModule } from '@nestjs/axios';
 import { forwardRef, Module } from '@nestjs/common';
 import { ClaimActionModule } from './claim.action/claim.action.module';
 import { NotificationModule } from './claim.notification/notification.module';
-import { ClaimsService } from './claims.service';
+import { Claims } from './claims';
+import { ClaimsApiService } from './claims.api/claims.api.service';
+import { ClaimsBotService } from './claims.bot.service';
 import { ClaimsUpdate } from './claims.update';
 import { CommentScene } from './scenes/comment.scene';
 import { StartScene } from './scenes/start.scene';
+import { ClaimsController } from './claims.controller';
 
 @Module({
   imports: [
@@ -13,7 +16,15 @@ import { StartScene } from './scenes/start.scene';
     NotificationModule,
     forwardRef(() => ClaimActionModule),
   ],
-  providers: [ClaimsService, ClaimsUpdate, CommentScene, StartScene],
-  exports: [ClaimsService],
+  providers: [
+    ClaimsBotService,
+    ClaimsUpdate,
+    CommentScene,
+    StartScene,
+    ClaimsApiService,
+    Claims,
+  ],
+  controllers: [ClaimsController],
+  exports: [ClaimsBotService],
 })
 export class ClaimsModule {}

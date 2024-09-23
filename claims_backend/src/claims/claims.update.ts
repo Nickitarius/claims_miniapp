@@ -1,10 +1,10 @@
 import { Action, Ctx, Hears, Help, Start, Update } from 'nestjs-telegraf';
 import { CustomContext } from 'src/interfaces/context.interface';
-import { ClaimsService } from './claims.service';
+import { ClaimsBotService } from './claims.bot.service';
 
 @Update()
 export class ClaimsUpdate {
-  constructor(private readonly claimsService: ClaimsService) {}
+  constructor(private readonly claimsService: ClaimsBotService) {}
 
   @Start()
   async start(@Ctx() ctx: CustomContext) {
