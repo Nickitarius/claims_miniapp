@@ -74,9 +74,9 @@ export class ClaimsBotService {
         claim.assigned = claim.assigned.replaceAll('_', '-');
 
         if (claim.status_id == 10 || claim.status_id == 20) {
-          newClaims += 1;
+          newClaims++;
         } else if (claim.status_id == 30) {
-          takenWork += 1;
+          takenWork++;
         }
 
         if (assigned == null) {
