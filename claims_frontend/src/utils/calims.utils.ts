@@ -12,7 +12,7 @@ export class ClaimsUtils {
     claim.status_name ??= '-';
 
     claim.claim_addr = claim.claim_addr.replaceAll('_', '-');
-    claim.claim_date = claim.claim_date.replaceAll('_', '-');
+    claim.claim_date = claim.claim_date.replaceAll('_', '-').replaceAll('T', ' ');
     claim.client_contract = claim.client_contract.replaceAll('_', '-');
     claim.client_name = claim.client_name.replaceAll('_', '-');
     claim.claim_phone = claim.claim_phone.replaceAll('_', '-');

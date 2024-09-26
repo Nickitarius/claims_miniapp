@@ -14,7 +14,7 @@ onMounted(() => {});
       class="d-flex justify-center align-center"
       size="large"
       block
-      @click="$router.push({ path: 'short_claims' })"
+      @click="$router.push({ path: 'claims_list' })"
       >Список заявок</v-btn
     >
   </v-container>

@@ -1,13 +1,14 @@
-import { createPinia } from 'pinia';
 import { createApp } from 'vue';
-
-import { createVuetify } from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
 import App from './App.vue';
 import router from './router';
 
+import { createPinia } from 'pinia';
+
+import { createVuetify } from 'vuetify';
 import { md3 } from 'vuetify/blueprints';
 import { components, directives } from 'vuetify/dist/vuetify.js';
+import 'vuetify/dist/vuetify.min.css';
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 
 const app = createApp(App);
 
@@ -19,11 +20,14 @@ const vuetify = createVuetify({
   components,
   directives,
   blueprint: md3,
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    },
+  },
 });
 app.use(vuetify);
-
-// app.use(VueTelegramPlugin);
-
-// app.config.globalProperties.TWA = window.Telegram.WebApp;
 
 app.mount('#app');

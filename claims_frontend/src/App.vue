@@ -11,8 +11,6 @@ function changeTheme() {
 }
 onThemeChanged(changeTheme);
 
-const telegramUser = window['Telegram'].WebApp.initDataUnsafe.user;
-
 onMounted(() => {
   changeTheme();
 });
