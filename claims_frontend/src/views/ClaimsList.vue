@@ -4,6 +4,7 @@ import { ClaimsService } from '../services/claims.service';
 import { baseStore } from '../stores/base.store';
 import { ClaimsUtils } from '../utils/calims.utils';
 import { Paginator } from '../utils/paginator';
+import { StatusTag, statusTagToColorMap } from '../utils/claim.statuses';
 
 const store = baseStore();
 
@@ -24,11 +25,13 @@ function getAllClaims() {
     assignedWorker.value = '-';
 
     for (let claim of res) {
-      claim = ClaimsUtils.adaptClaimFields(claim);
+      claim = ClaimsUtils.adaptClaimAttributes(claim);
       if (claim.status_id == 10 || claim.status_id == 20) {
         newClaimsNo.value++;
+        claim.status_tag = StatusTag.NewClaim;
       } else if (claim.status_id == 30) {
         takenWorksNo.value++;
+        claim.status_tag = StatusTag.Taken;
       }
       if (assignedWorker.value == '-') {
         assignedWorker.value = claim.assigned;
@@ -57,7 +60,15 @@ onMounted(async () => {
 
     <v-expansion-panels>
       <v-expansion-panel v-for="claim in paginator.getCurrentPage()" :key="claim['id']">
-        <v-expansion-panel-title>{{ claim['claim_addr'] }}</v-expansion-panel-title>
+        <v-expansion-panel-title>
+          <v-badge
+            v-if="claim.status_tag"
+            :color="statusTagToColorMap.get(claim.status_tag)"
+            v-bind:content="claim.status_tag"
+            inline
+          ></v-badge
+          >{{ claim['claim_addr'] }}</v-expansion-panel-title
+        >
         <v-expansion-panel-text>
           <b>Обращение №: </b>{{ claim['claim_no'] }}<br />
           <b>Статус: </b>{{ claim['status_name'] }}<br />

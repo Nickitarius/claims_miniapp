@@ -1,5 +1,7 @@
+import { StatusTag } from './claim.statuses';
+
 export class ClaimsUtils {
-  static adaptClaimFields(claim) {
+  static adaptClaimAttributes(claim) {
     claim.client_contract ??= '-';
     claim.client_name ??= '-';
     claim.claim_phone ??= '-';
@@ -19,6 +21,12 @@ export class ClaimsUtils {
     claim.autor = claim.autor.replaceAll('_', '-');
     claim.assigned = claim.assigned.replaceAll('_', '-');
     claim.comment = claim.comment.replaceAll('_', '-');
+
+    if (claim.status_id == 10 || claim.status_id == 20) {
+      claim.status_tag = StatusTag.NewClaim;
+    } else if (claim.status_id == 30) {
+      claim.status_tag = StatusTag.Taken;
+    }
 
     return claim;
   }
