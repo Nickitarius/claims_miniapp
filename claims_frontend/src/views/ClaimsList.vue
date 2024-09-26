@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { ClaimsService } from '../services/claims.service';
 import { baseStore } from '../stores/base.store';
 import { ClaimsUtils } from '../utils/calims.utils';
