@@ -9,6 +9,7 @@ import { md3 } from 'vuetify/blueprints';
 import { components, directives } from 'vuetify/dist/vuetify.js';
 import 'vuetify/dist/vuetify.min.css';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
+import { AxiosConfig } from './services/axios.config';
 
 const app = createApp(App);
 

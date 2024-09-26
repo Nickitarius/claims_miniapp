@@ -1,8 +1,10 @@
-import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import { AxiosConfig } from '../services/axios.config';
 
-export const baseStore = defineStore('counter', () => {
-  const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+export const baseStore = defineStore('baseStore', () => {
+  const tgUser = window['Telegram'].WebApp.initDataUnsafe.user;
 
-  return { tgUser };
+  const axiosConfig = new AxiosConfig();
+
+  return { tgUser, axiosConfig };
 });

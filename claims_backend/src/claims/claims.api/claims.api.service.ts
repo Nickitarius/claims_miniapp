@@ -20,7 +20,7 @@ export class ClaimsApiService {
   private readonly logger = new Logger(ClaimsApiService.name);
   private readonly apiUrl;
 
-  async getAllClaims(uid: string) {
+  async getAllClaims(uid: string): Promise<any> {
     const uuidOne = uuidV4();
 
     const requestConfig = {
@@ -31,20 +31,47 @@ export class ClaimsApiService {
     };
     const url = this.apiUrl + `?uid=${uid}`;
 
-    let response;
+    this.logger.log(`${uid} Request ${url}`);
 
-    try {
-      this.logger.log(`${uid} Request ${url}`);
-      response = await firstValueFrom(
-        this.httpService.get(url, requestConfig).pipe(
-          catchError((error: AxiosError) => {
-            throw error;
-          }),
-        ),
-      );
-    } catch (error) {
-      ClaimsUtils.handleReqError(error, uuidOne, uid, this.logger);
-    }
+    const response = await firstValueFrom(
+      await this.httpService.get(url, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          const errText = ClaimsUtils.handleReqError(
+            error,
+            uuidOne,
+            uid,
+            this.logger,
+          );
+          throw errText;
+        }),
+      ),
+    );
+
+    const data = response.data;
+    return data;
+  }
+
+  async getClaim(claimNo, uid: string) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+
+    const url = this.apiUrl + `/${claimNo}?uid=${uid}`;
+
+    this.logger.log(`${uid} Request ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.get(url, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          ClaimsUtils.handleReqError(error, uuidOne, uid, this.logger);
+          throw error;
+        }),
+      ),
+    );
 
     const data = response.data;
     return data;

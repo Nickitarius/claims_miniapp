@@ -130,7 +130,6 @@ export class ClaimsUtils {
   }
 
   static async handleReqError(error, uuidOne, uid, logger) {
-    console.log('ssss');
     let errorMessage;
 
     if (error.response) {
@@ -143,6 +142,6 @@ export class ClaimsUtils {
 
     logger.error(errorMessage);
 
-    throw new HttpException(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    return errorMessage;
   }
 }

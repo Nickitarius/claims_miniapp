@@ -84,7 +84,7 @@ onMounted(async () => {
           <b>Комментарий к заявке: </b>{{ claim['comment'] }}<br />
           <b>Комментарий к работе: </b>{{ claim['work_commentary'] }}<br />
 
-          <div class="pa-3"><v-btn size="large">К заявке</v-btn></div>
+          <div class="pa-3"><v-btn size="large" block>К заявке</v-btn></div>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
