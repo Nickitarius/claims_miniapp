@@ -76,4 +76,44 @@ export class ClaimsApiService {
     const data = response.data;
     return data;
   }
+
+  async takeWork(claim, tgUser) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+    const url = this.apiUrl + `/action/takework?uid=${tgUser.user_id}`;
+
+    const data = {
+      id: uuidOne,
+      type: 'takework',
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      username: tgUser.username,
+      first_name: tgUser.first_name,
+      user_id: tgUser.user_id,
+    };
+
+    this.logger.log(`${tgUser.user_id} Request ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.post(url, data, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          console.log('pip');
+          ClaimsUtils.handleReqError(
+            error,
+            uuidOne,
+            tgUser.user_id,
+            this.logger,
+          );
+          throw error;
+        }),
+      ),
+    );
+
+    return response.status;
+  }
 }

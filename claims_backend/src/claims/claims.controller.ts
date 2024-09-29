@@ -1,12 +1,16 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Param,
+  Post,
   Query,
+  Res,
 } from '@nestjs/common';
 import { ClaimsApiService } from './claims.api/claims.api.service';
+import { Response } from 'express';
 
 @Controller('claims')
 export class ClaimsController {
@@ -17,8 +21,6 @@ export class ClaimsController {
     try {
       return await this.claimsApiService.getAllClaims(uid);
     } catch (error) {
-      console.log('murrrr');
-      console.log(error);
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -27,11 +29,24 @@ export class ClaimsController {
   async getClaim(@Param() params: any, @Query('uid') uid) {
     try {
       const claimNo = params.claim_no;
-      console.log(claimNo);
-      await this.claimsApiService.getClaim(claimNo, uid);
+      return await this.claimsApiService.getClaim(claimNo, uid);
     } catch (error) {
-      console.log('murrrr');
-      throw new HttpException(error.response, error.status);
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('action/take_work')
+  async takeWork(@Body() body, @Res() res: Response) {
+    console.log('req');
+    try {
+      const status = await this.claimsApiService.takeWork(
+        body.claim,
+        body.tg_user,
+      );
+      return res.status(status).send();
+    } catch (error) {
+      console.log('catch');
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
