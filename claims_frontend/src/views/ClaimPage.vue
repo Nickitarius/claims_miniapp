@@ -16,6 +16,7 @@ var isShowCommentaryDialog = ref(false);
 var commentary = ref('');
 var isCommentaryValid = ref(false);
 var currentAction = ref('');
+var accounts = ref();
 
 onMounted(async () => {
   claim.value = await ClaimsService.getClaimByClaimNo(route.params.claim_no, store.tgUser);
@@ -101,23 +102,44 @@ async function submitActionWithCommentary() {
     }
   }
 }
+
+async function getAccounts() {
+  accounts.value = await ClaimsService.getAccounts(claim.value, store.tgUser);
+  console.log(accounts.value);
+}
 </script>
 
 <template>
   <v-container>
-    <b>Обращение №: </b>{{ claim['claim_no'] }}<br />
-    <b>Статус: </b>{{ claim['status_name'] }}<br />
-    <b>Дата: </b>{{ claim['claim_date'] }}<br />
-    <b>Договор: </b>{{ claim['client_contract'] }}<br />
-    <b>Телефон: </b>
-    <a v-bind:href="'tel:' + claim['claim_phone']">{{ claim['claim_phone'] }}</a
-    ><br />
-    <b>Имя: </b>{{ claim['client_name'] }}<br />
-    <b>Адрес: </b>{{ claim['claim_addr'] }}<br />
-    <b>Инициатор: </b>{{ claim['autor'] }}<br />
-    <b>Исполнитель: </b>{{ claim['assigned'] }}<br />
-    <b>Комментарий к заявке: </b>{{ claim['comment'] }}<br />
-    <b>Комментарий к работе: </b>{{ claim['work_commentary'] }}<br />
+    <v-sheet border="md" class="pa-6 mx-auto" rounded>
+      <b>Обращение №: </b>{{ claim['claim_no'] }}<br />
+      <b>Статус: </b>{{ claim['status_name'] }}<br />
+      <b>Дата: </b>{{ claim['claim_date'] }}<br />
+      <b>Договор: </b>{{ claim['client_contract'] }}<br />
+      <b>Телефон: </b>
+      <a v-bind:href="'tel:' + claim['claim_phone']">{{ claim['claim_phone'] }}</a
+      ><br />
+      <b>Имя: </b>{{ claim['client_name'] }}<br />
+      <b>Адрес: </b>{{ claim['claim_addr'] }}<br />
+      <b>Инициатор: </b>{{ claim['autor'] }}<br />
+      <b>Исполнитель: </b>{{ claim['assigned'] }}<br />
+      <b>Комментарий к заявке: </b>{{ claim['comment'] }}<br />
+      <b>Комментарий к работе: </b>{{ claim['work_commentary'] }}<br />
+
+      <v-expansion-panels class="ma-1 mt-3" v-if="accounts">
+        <v-expansion-panel title="Логины и пароли">
+          <v-expansion-panel-text>
+            <div v-for="(account, index) in accounts" :key="index">
+              <b>Аккаунт код:</b> {{ account.account_code }} <br />
+              <b>Статус:</b> {{ account.status_name }}<br />
+              <b>Тарифный план:</b> {{ account.tarplan_name }}<br />
+              <b>Логин:</b> {{ account.login }}<br />
+              <b>Пароль:</b> {{ account.password }}<br />
+              <v-divider v-if="index < accounts.length - 1" class="ma-2"></v-divider>
+            </div>
+          </v-expansion-panel-text> </v-expansion-panel
+      ></v-expansion-panels>
+    </v-sheet>
 
     <div class="ma-3">
       <v-col>
@@ -126,7 +148,9 @@ async function submitActionWithCommentary() {
             >SMS о недозвоне</v-btn
           >
 
-          <v-btn class="ma-3" size="large" block color="info">Логин и пароль</v-btn>
+          <v-btn class="ma-3" size="large" block color="info" @click="getAccounts()"
+            >Логин и пароль</v-btn
+          >
 
           <v-btn
             class="ma-3"
@@ -137,20 +161,20 @@ async function submitActionWithCommentary() {
             >Добавить комментарий</v-btn
           >
 
-          <v-btn class="ma-3" size="large" block color="success" @click="addCommentary('complete')"
+          <v-btn class="ma-4" size="large" block color="success" @click="addCommentary('complete')"
             >Закрыть заявку</v-btn
           >
 
-          <v-btn class="ma-3" size="large" block color="error" @click="addCommentary('return')"
+          <v-btn class="ma-4" size="large" block color="error" @click="addCommentary('return')"
             >Вернуть заявку</v-btn
           >
         </div>
 
-        <v-btn class="ma-3" size="large" block @click="takeWork()" v-if="isShowTakeWorkButton"
+        <v-btn class="ma-4" size="large" block @click="takeWork()" v-if="isShowTakeWorkButton"
           >В работу</v-btn
         >
         <v-btn
-          class="ma-3"
+          class="ma-4"
           size="large"
           block
           @click="$router.push({ path: `/claims_list` })"

@@ -35,6 +35,25 @@ export class ClaimsController {
     }
   }
 
+  @Get('action/get_accounts')
+  async getAccounts(
+    @Param() params: any,
+    @Query('uid') uid,
+    @Query('client_contract') clientContract,
+  ) {
+    try {
+      console.log(uid, clientContract);
+      const claimNo = params.claim_no;
+      return await this.claimsApiService.getAccounts(
+        claimNo,
+        clientContract,
+        uid,
+      );
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Post('action/take_work')
   async takeWork(@Body() body, @Res() res: Response) {
     console.log('req');

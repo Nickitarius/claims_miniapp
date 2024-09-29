@@ -77,6 +77,37 @@ export class ClaimsApiService {
     return data;
   }
 
+  async getAccounts(claimNo, clientContract, uid: string) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+
+    const url = this.apiUrl + `/action?uid=${uid}`;
+
+    const data = {
+      id: uuidOne,
+      type: 'getaccounts',
+      user_id: uid,
+      options: { contract: clientContract },
+    };
+
+    this.logger.log(`${uid} Request ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.post(url, data, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          ClaimsUtils.handleReqError(error, uuidOne, uid, this.logger);
+          throw error;
+        }),
+      ),
+    );
+    return response.data;
+  }
+
   async takeWork(claim, tgUser) {
     const uuidOne = uuidV4();
 

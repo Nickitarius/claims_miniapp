@@ -89,4 +89,20 @@ export class ClaimsService {
     });
     return response;
   }
+
+  static async getAccounts(claim, tgUser) {
+    const store = baseStore();
+    const ax = store.axiosConfig.axiosInstance;
+
+    console.log('sss');
+
+    const response = await ax
+      .get(`action/get_accounts`, {
+        params: { uid: tgUser.id, client_contract: claim.client_contract },
+      })
+      .catch((error) => {
+        throw error;
+      });
+    return response.data;
+  }
 }
