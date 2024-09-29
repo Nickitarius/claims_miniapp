@@ -49,4 +49,67 @@ export class ClaimsController {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @Post('action/senddefsms')
+  async sendDefSMS(@Body() body, @Res() res: Response) {
+    console.log('req');
+    try {
+      const status = await this.claimsApiService.sendDefSMS(
+        body.claim,
+        body.tg_user,
+      );
+      return res.status(status).send();
+    } catch (error) {
+      console.log('catch');
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('action/complete')
+  async completeClaim(@Body() body, @Res() res: Response) {
+    console.log('req');
+    try {
+      const status = await this.claimsApiService.completeClaim(
+        body.claim,
+        body.commentary,
+        body.tg_user,
+      );
+      return res.status(status).send();
+    } catch (error) {
+      console.log('catch');
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('action/addcomment')
+  async addComment(@Body() body, @Res() res: Response) {
+    console.log('req');
+    try {
+      const status = await this.claimsApiService.addComment(
+        body.claim,
+        body.commentary,
+        body.tg_user,
+      );
+      return res.status(status).send();
+    } catch (error) {
+      console.log('catch');
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('action/return')
+  async returnClaim(@Body() body, @Res() res: Response) {
+    console.log('req');
+    try {
+      const status = await this.claimsApiService.returnClaim(
+        body.claim,
+        body.commentary,
+        body.tg_user,
+      );
+      return res.status(status).send();
+    } catch (error) {
+      console.log('catch');
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

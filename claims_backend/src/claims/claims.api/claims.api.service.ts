@@ -86,7 +86,7 @@ export class ClaimsApiService {
         password: this.configService.get('API_PASS'),
       },
     };
-    const url = this.apiUrl + `/action/takework?uid=${tgUser.user_id}`;
+    const url = this.apiUrl + `/action?uid=${tgUser.user_id}`;
 
     const data = {
       id: uuidOne,
@@ -96,6 +96,168 @@ export class ClaimsApiService {
       username: tgUser.username,
       first_name: tgUser.first_name,
       user_id: tgUser.user_id,
+    };
+
+    this.logger.log(`${tgUser.user_id} Request ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.post(url, data, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          ClaimsUtils.handleReqError(
+            error,
+            uuidOne,
+            tgUser.user_id,
+            this.logger,
+          );
+          throw error;
+        }),
+      ),
+    );
+
+    return response.status;
+  }
+
+  async sendDefSMS(claim, tgUser) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+    const url = this.apiUrl + `/action?uid=${tgUser.user_id}`;
+
+    const data = {
+      id: uuidOne,
+      type: 'senddefsms',
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      username: tgUser.username,
+      first_name: tgUser.first_name,
+      user_id: tgUser.user_id,
+      options: { phone: claim.claim_phone, def_id: 1 },
+    };
+
+    this.logger.log(`${tgUser.user_id} Request ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.post(url, data, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          ClaimsUtils.handleReqError(
+            error,
+            uuidOne,
+            tgUser.user_id,
+            this.logger,
+          );
+          throw error;
+        }),
+      ),
+    );
+
+    return response.status;
+  }
+
+  async completeClaim(claim, commentary, tgUser) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+    const url = this.apiUrl + `/action?uid=${tgUser.user_id}`;
+
+    const data = {
+      id: uuidOne,
+      type: 'complete',
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      username: tgUser.username,
+      first_name: tgUser.first_name,
+      user_id: tgUser.user_id,
+      commentary: commentary,
+    };
+
+    this.logger.log(`${tgUser.user_id} Request ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.post(url, data, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          console.log('pip');
+          ClaimsUtils.handleReqError(
+            error,
+            uuidOne,
+            tgUser.user_id,
+            this.logger,
+          );
+          throw error;
+        }),
+      ),
+    );
+
+    return response.status;
+  }
+
+  async addComment(claim, commentary, tgUser) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+    const url = this.apiUrl + `/action?uid=${tgUser.user_id}`;
+
+    const data = {
+      id: uuidOne,
+      type: 'addcomment',
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      username: tgUser.username,
+      first_name: tgUser.first_name,
+      user_id: tgUser.user_id,
+      commentary: commentary,
+    };
+
+    this.logger.log(`${tgUser.user_id} Request ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.post(url, data, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          console.log('pip');
+          ClaimsUtils.handleReqError(
+            error,
+            uuidOne,
+            tgUser.user_id,
+            this.logger,
+          );
+          throw error;
+        }),
+      ),
+    );
+
+    return response.status;
+  }
+
+  async returnClaim(claim, commentary, tgUser) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+    const url = this.apiUrl + `/action?uid=${tgUser.user_id}`;
+
+    const data = {
+      id: uuidOne,
+      type: 'return',
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      username: tgUser.username,
+      first_name: tgUser.first_name,
+      user_id: tgUser.user_id,
+      commentary: commentary,
     };
 
     this.logger.log(`${tgUser.user_id} Request ${url}`);
