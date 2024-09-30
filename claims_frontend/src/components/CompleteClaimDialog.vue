@@ -46,13 +46,10 @@ async function submitCompleteClaim() {
 
 function addWriteoff() {
   writeOffs.value.push({ quantity: 1 });
-
-  console.log(writeOffs.value);
 }
 
 function removeWriteOff(index) {
   writeOffs.value.splice(index, 1);
-  console.log(index)
 }
 
 onMounted(async () => {
@@ -63,7 +60,6 @@ onMounted(async () => {
 
 <template>
   <v-container>
-    <!-- width="auto" -->
     <v-dialog v-model="isShow">
       <v-form @submit.prevent="submitCompleteClaim" v-model="isCommentaryValid">
         <v-card title="Закройте заявку">
@@ -112,11 +108,15 @@ onMounted(async () => {
                 ></v-text-field>
               </v-col>
 
-              <v-col>
-                <!-- <v-btn density="default" icon="mdi-plus"></v-btn> -->
-                <v-btn @click="removeWriteOff(index)">Удалить</v-btn>
+              <v-col cols="1">
+                <v-btn
+                  @click="removeWriteOff(index)"
+                  color="error"
+                  icon="$delete"
+                  variant="text"
+                  class="mt-4"
+                />
               </v-col>
-              <!-- <v-icon color="error" icon="mdi-information"></v-icon> -->
             </v-row>
 
             <v-row v-if="writeOffs.length < 20">
