@@ -11,8 +11,6 @@ function changeTheme() {
 }
 onThemeChanged(changeTheme);
 
-console.log(import.meta.env.VITE_API_URL);
-
 onMounted(() => {
   changeTheme();
 });

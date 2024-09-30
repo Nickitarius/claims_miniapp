@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import CommentDialog from '../components/CommentDialog.vue';
+import CompleteClaimDialog from '../components/CompleteClaimDialog.vue';
 import { ClaimsService } from '../services/claims.service';
 import { baseStore } from '../stores/base.store';
 
@@ -13,8 +15,7 @@ var snackbarText = ref('');
 var isShowTakeWorkButton = ref(false);
 var isShowControlButtons = ref(false);
 var isShowCommentaryDialog = ref(false);
-var commentary = ref('');
-var isCommentaryValid = ref(false);
+var isShowCompleteClaimDialog = ref(false);
 var currentAction = ref('');
 var accounts = ref();
 
@@ -66,46 +67,12 @@ function addCommentary(action: string) {
   currentAction.value = action;
 }
 
-function isNotEmptyRule(input: string) {
-  console.log(input.length);
-  if (input.length > 0) {
-    console.log('Goyim');
-    return true;
-  } else {
-    return 'Обязательно напишите комментарий.';
-  }
-}
-
-async function submitActionWithCommentary() {
-  if (isCommentaryValid.value) {
-    isShowCommentaryDialog.value = false;
-    let res;
-    switch (currentAction.value) {
-      case 'addcomment':
-        res = await ClaimsService.addComment(claim.value, commentary.value, store.tgUser);
-        snackbarText.value = 'Комментарий отправлен.';
-        break;
-      case 'complete':
-        res = await ClaimsService.completeClaim(claim.value, commentary.value, store.tgUser);
-        snackbarText.value = 'Заявка завершена.';
-        break;
-      case 'return':
-        res = await ClaimsService.returnClaim(claim.value, commentary.value, store.tgUser);
-        snackbarText.value = 'Заявка возвращена.';
-        break;
-    }
-
-    if (res.status >= 200 && res.status < 300) {
-      isShowSnackbar.value = true;
-      commentary.value = '';
-      currentAction.value = '';
-    }
-  }
+async function closeClaim() {
+  isShowCompleteClaimDialog.value = true;
 }
 
 async function getAccounts() {
   accounts.value = await ClaimsService.getAccounts(claim.value, store.tgUser);
-  console.log(accounts.value);
 }
 </script>
 
@@ -126,7 +93,7 @@ async function getAccounts() {
       <b>Комментарий к заявке: </b>{{ claim['comment'] }}<br />
       <b>Комментарий к работе: </b>{{ claim['work_commentary'] }}<br />
 
-      <v-expansion-panels class="ma-1 mt-3" v-if="accounts">
+      <v-expansion-panels class="my-1 mt-3" v-if="accounts">
         <v-expansion-panel title="Логины и пароли">
           <v-expansion-panel-text>
             <div v-for="(account, index) in accounts" :key="index">
@@ -135,25 +102,25 @@ async function getAccounts() {
               <b>Тарифный план:</b> {{ account.tarplan_name }}<br />
               <b>Логин:</b> {{ account.login }}<br />
               <b>Пароль:</b> {{ account.password }}<br />
-              <v-divider v-if="index < accounts.length - 1" class="ma-2"></v-divider>
+              <v-divider v-if="index < accounts.length - 1" class="mb-2 mt-2"></v-divider>
             </div>
           </v-expansion-panel-text> </v-expansion-panel
       ></v-expansion-panels>
     </v-sheet>
 
-    <div class="ma-3">
+    <div class="my-3">
       <v-col>
         <div v-if="isShowControlButtons">
-          <v-btn class="ma-3" size="large" block color="warning" @click="sendDefSMS()"
+          <v-btn class="my-3" size="large" block color="warning" @click="sendDefSMS()"
             >SMS о недозвоне</v-btn
           >
 
-          <v-btn class="ma-3" size="large" block color="info" @click="getAccounts()"
+          <v-btn class="my-3" size="large" block color="info" @click="getAccounts()"
             >Логин и пароль</v-btn
           >
 
           <v-btn
-            class="ma-3"
+            class="my-3"
             size="large"
             block
             color="secondary"
@@ -161,20 +128,20 @@ async function getAccounts() {
             >Добавить комментарий</v-btn
           >
 
-          <v-btn class="ma-4" size="large" block color="success" @click="addCommentary('complete')"
+          <v-btn class="my-3" size="large" block color="success" @click="closeClaim()"
             >Закрыть заявку</v-btn
           >
 
-          <v-btn class="ma-4" size="large" block color="error" @click="addCommentary('return')"
+          <v-btn class="my-3" size="large" block color="error" @click="addCommentary('return')"
             >Вернуть заявку</v-btn
           >
         </div>
 
-        <v-btn class="ma-4" size="large" block @click="takeWork()" v-if="isShowTakeWorkButton"
+        <v-btn class="my-3" size="large" block @click="takeWork()" v-if="isShowTakeWorkButton"
           >В работу</v-btn
         >
         <v-btn
-          class="ma-4"
+          class="my-3"
           size="large"
           block
           @click="$router.push({ path: `/claims_list` })"
@@ -183,6 +150,14 @@ async function getAccounts() {
         >
       </v-col>
     </div>
+
+    <comment-dialog
+      v-model:isShow="isShowCommentaryDialog"
+      v-model:claim="claim"
+      v-model:currentAction="currentAction"
+    />
+
+    <complete-claim-dialog v-model:isShow="isShowCompleteClaimDialog" v-model:claim="claim" />
 
     <v-snackbar v-model="isShowSnackbar" :timeout="6000" color="success">
       {{ snackbarText }}
@@ -193,38 +168,5 @@ async function getAccounts() {
         </v-btn>
       </template>
     </v-snackbar>
-
-    <v-dialog v-model="isShowCommentaryDialog" width="auto">
-      <v-form @submit.prevent="submitActionWithCommentary" v-model="isCommentaryValid">
-        <v-card title="Оставьте комментарий">
-          <v-card-text>
-            <v-row dense>
-              <v-col cols="12" md="4" sm="6">
-                <v-text-field
-                  label="Комментарий*"
-                  hint="Ваш комментарий к работе"
-                  persistent-hint
-                  required
-                  :rules="[isNotEmptyRule]"
-                  v-model="commentary"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <small class="text-caption text-medium-emphasis">*обязательные поля</small>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn text="Отмена" @click="isShowCommentaryDialog = false" variant="plain"></v-btn>
-
-            <v-btn color="primary" text="Сохранить" variant="tonal" type="submit"></v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-form>
-    </v-dialog>
   </v-container>
 </template>

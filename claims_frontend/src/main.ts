@@ -4,6 +4,7 @@ import router from './router';
 
 import { createPinia } from 'pinia';
 
+// import '@mdi/font/css/materialdesignicons.css';
 import { createVuetify } from 'vuetify';
 import { md3 } from 'vuetify/blueprints';
 import { components, directives } from 'vuetify/dist/vuetify.js';
