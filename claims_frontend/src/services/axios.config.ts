@@ -3,7 +3,7 @@ import router from '../router';
 import { baseStore } from '../stores/base.store';
 
 export class AxiosConfig {
-  private backendUrl = 'https://lb2q1lw2-3900.euw.devtunnels.ms/claims';
+  private backendUrl = import.meta.env.VITE_API_URL;
   public axiosInstance: AxiosInstance;
 
   constructor() {
