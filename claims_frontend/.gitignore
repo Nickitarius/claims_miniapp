@@ -30,4 +30,5 @@ coverage
 *.tsbuildinfo
 
 #Custom
-/secrets
+/secrets/example.key.pem
+/secrets/example.cert.pem
