@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Req } from '@nestjs/common';
-import { NotificationService } from './notification.service';
 import { Ctx } from 'nestjs-telegraf';
 import { CustomContext } from 'src/interfaces/context.interface';
+import { NotificationService } from './notification.service';
 
 @Controller('/notify')
 export class ClaimNotificationController {

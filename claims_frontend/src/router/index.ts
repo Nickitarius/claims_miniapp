@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Claim from '../views/ClaimPage.vue';
 import ClaimsList from '../views/ClaimsList.vue';
+import Error from '../views/ErrorView.vue';
 import HomeView from '../views/HomeView.vue';
 
 const router = createRouter({
@@ -15,6 +17,8 @@ const router = createRouter({
       name: 'Список заявок',
       component: ClaimsList,
     },
+    { path: '/claim/:claim_no', name: 'Заявка', component: Claim },
+    { path: '/error', name: 'Ошибка', component: Error },
   ],
 });
 

@@ -255,12 +255,13 @@ export class ClaimsBotService {
     if (data.claims.length == 1) {
       paginator.isEnableItemButtons = false;
 
-      let claim = data.claims[0];
-      claim ??= 666;
-      switch (claim.id) {
+      const claim = data.claims[0];
+      switch (claim.status_id) {
         case 10:
         case 20:
           customButtons.push([Buttons.takeWorkButton(claim)]);
+          break;
+        case 50:
           break;
         case 666:
           this.logger.warn(
@@ -372,6 +373,9 @@ export class ClaimsBotService {
         case 20:
           keyboard.push([Buttons.takeWorkButton(data)]);
           break;
+
+        case 50:
+          break;
         case undefined:
           this.logger.warn(
             `UUIF: ${uuidOne}; User: ${user.id}(${user.username}); Claim has no defined status_id; data = ${JSON.stringify(data, null, 3)}`,
@@ -390,7 +394,7 @@ export class ClaimsBotService {
       keyboard.push([Buttons.getShortClaimsButton('К списку')]);
       replyMarkup = Markup.inlineKeyboard(keyboard).reply_markup;
 
-      context.claimData = data;
+      context.session['claimData'] = data;
 
       try {
         await context.editMessageText(page, {

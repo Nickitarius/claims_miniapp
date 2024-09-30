@@ -7,7 +7,7 @@ export class ClaimActionUpdates {
   constructor(private readonly calimActionService: ClaimActionService) {}
 
   @Action(/^cl_action/)
-  async charactersPage(@Ctx() ctx: CustomContext) {
+  async claimAction(@Ctx() ctx: CustomContext) {
     await this.calimActionService.claimAction(ctx);
   }
 }

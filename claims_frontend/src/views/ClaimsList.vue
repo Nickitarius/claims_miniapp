@@ -62,9 +62,9 @@ onMounted(async () => {
       <v-expansion-panel v-for="claim in paginator.getCurrentPage()" :key="claim['id']">
         <v-expansion-panel-title>
           <v-badge
-            v-if="claim.status_tag"
-            :color="statusTagToColorMap.get(claim.status_tag)"
-            v-bind:content="claim.status_tag"
+            v-if="claim['status_tag']"
+            :color="statusTagToColorMap.get(claim['status_tag'])"
+            v-bind:content="claim['status_tag']"
             inline
           ></v-badge
           >{{ claim['claim_addr'] }}</v-expansion-panel-title
@@ -84,7 +84,11 @@ onMounted(async () => {
           <b>Комментарий к заявке: </b>{{ claim['comment'] }}<br />
           <b>Комментарий к работе: </b>{{ claim['work_commentary'] }}<br />
 
-          <div class="pa-3"><v-btn size="large">К заявке</v-btn></div>
+          <div class="pa-3">
+            <v-btn size="large" block @click="$router.push({ path: `claim/${claim['claim_no']}` })"
+              >К заявке</v-btn
+            >
+          </div>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
