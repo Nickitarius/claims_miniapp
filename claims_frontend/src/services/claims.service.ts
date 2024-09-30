@@ -34,7 +34,7 @@ export class ClaimsService {
     const store = baseStore();
     const ax = store.axiosConfig.axiosInstance;
 
-    const data = { claim: claim, tg_user: tgUser };
+    const data = { claim_no: claim.claim_no, claim_id: claim.id, tg_user: tgUser };
 
     const response = await ax.post(`action/take_work`, data).catch((error) => {
       throw error;
@@ -46,7 +46,14 @@ export class ClaimsService {
     const store = baseStore();
     const ax = store.axiosConfig.axiosInstance;
 
-    const data = { claim: claim, tg_user: tgUser };
+    console.log(claim.claim_phone);
+
+    const data = {
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      claim_phone: claim.claim_phone,
+      tg_user: tgUser,
+    };
 
     const response = await ax.post(`action/senddefsms`, data).catch((error) => {
       throw error;
@@ -58,7 +65,13 @@ export class ClaimsService {
     const store = baseStore();
     const ax = store.axiosConfig.axiosInstance;
 
-    const data = { claim: claim, tg_user: tgUser, commentary: commentary, write_offs: writeOffs };
+    const data = {
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      tg_user: tgUser,
+      commentary: commentary,
+      write_offs: writeOffs,
+    };
 
     const response = await ax.post(`action/complete`, data).catch((error) => {
       throw error;
@@ -70,7 +83,12 @@ export class ClaimsService {
     const store = baseStore();
     const ax = store.axiosConfig.axiosInstance;
 
-    const data = { claim: claim, tg_user: tgUser, commentary: commentary };
+    const data = {
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      tg_user: tgUser,
+      commentary: commentary,
+    };
 
     const response = await ax.post(`action/addcomment`, data).catch((error) => {
       throw error;
@@ -82,7 +100,12 @@ export class ClaimsService {
     const store = baseStore();
     const ax = store.axiosConfig.axiosInstance;
 
-    const data = { claim: claim, tg_user: tgUser, commentary: commentary };
+    const data = {
+      claim_id: claim.id,
+      claim_no: claim.claim_no,
+      tg_user: tgUser,
+      commentary: commentary,
+    };
 
     const response = await ax.post(`action/return`, data).catch((error) => {
       throw error;

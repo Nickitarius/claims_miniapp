@@ -27,10 +27,16 @@ function isNotEmptyRule(input: string) {
 async function submitCompleteClaim() {
   if (isCommentaryValid.value) {
     isShow.value = false;
+
+    const writeOffInfo = writeOffs.value.map((a) => {
+      return { consumableId: a.consumable.id, quantity: a.quantity };
+    });
+    console.log(writeOffInfo);
+
     const res = await ClaimsService.completeClaim(
       claim.value,
       commentary.value,
-      writeOffs,
+      writeOffs.value,
       store.tgUser,
     );
 
@@ -39,6 +45,10 @@ async function submitCompleteClaim() {
     if (res.status >= 200 && res.status < 300) {
       isShowSnackbar.value = true;
       commentary.value = '';
+      commentary.value = '';
+      writeOffs.value = [];
+      avilableConsumables.value = [];
+      consumables.value = [];
     }
   }
 }

@@ -77,7 +77,7 @@ export class ClaimsApiService {
     return data;
   }
 
-  async getAccounts(claimNo, clientContract, uid: string) {
+  async getAccounts(clientContract, uid: string) {
     const uuidOne = uuidV4();
 
     const requestConfig = {
@@ -108,7 +108,7 @@ export class ClaimsApiService {
     return response.data;
   }
 
-  async takeWork(claim, tgUser) {
+  async takeWork(claimId, claimNo, tgUser) {
     const uuidOne = uuidV4();
 
     const requestConfig = {
@@ -122,8 +122,8 @@ export class ClaimsApiService {
     const data = {
       id: uuidOne,
       type: 'takework',
-      claim_id: claim.id,
-      claim_no: claim.claim_no,
+      claim_id: claimId,
+      claim_no: claimNo,
       username: tgUser.username,
       first_name: tgUser.first_name,
       user_id: tgUser.user_id,
@@ -147,7 +147,7 @@ export class ClaimsApiService {
     return response.status;
   }
 
-  async sendDefSMS(claim, tgUser) {
+  async sendDefSMS(claimId, claimNo, claimPhone, tgUser) {
     const uuidOne = uuidV4();
 
     const requestConfig = {
@@ -158,15 +158,17 @@ export class ClaimsApiService {
     };
     const url = this.apiUrl + `/action?uid=${tgUser.user_id}`;
 
+    console.log(claimPhone);
+
     const data = {
       id: uuidOne,
       type: 'senddefsms',
-      claim_id: claim.id,
-      claim_no: claim.claim_no,
+      claim_id: claimId,
+      claim_no: claimNo,
       username: tgUser.username,
       first_name: tgUser.first_name,
       user_id: tgUser.user_id,
-      options: { phone: claim.claim_phone, def_id: 1 },
+      options: { phone: claimPhone, def_id: 1 },
     };
 
     this.logger.log(`${tgUser.user_id} Request ${url}`);
@@ -187,7 +189,7 @@ export class ClaimsApiService {
     return response.status;
   }
 
-  async completeClaim(claim, commentary, tgUser) {
+  async completeClaim(claimId, claimNo, commentary, writeOffs, tgUser) {
     const uuidOne = uuidV4();
 
     const requestConfig = {
@@ -201,12 +203,13 @@ export class ClaimsApiService {
     const data = {
       id: uuidOne,
       type: 'complete',
-      claim_id: claim.id,
-      claim_no: claim.claim_no,
+      claim_id: claimId,
+      claim_no: claimNo,
       username: tgUser.username,
       first_name: tgUser.first_name,
       user_id: tgUser.user_id,
       commentary: commentary,
+      write_offs: writeOffs,
     };
 
     this.logger.log(`${tgUser.user_id} Request ${url}`);
@@ -228,7 +231,7 @@ export class ClaimsApiService {
     return response.status;
   }
 
-  async addComment(claim, commentary, tgUser) {
+  async addComment(claimId, claimNo, commentary, tgUser) {
     const uuidOne = uuidV4();
 
     const requestConfig = {
@@ -242,8 +245,8 @@ export class ClaimsApiService {
     const data = {
       id: uuidOne,
       type: 'addcomment',
-      claim_id: claim.id,
-      claim_no: claim.claim_no,
+      claim_id: claimId,
+      claim_no: claimNo,
       username: tgUser.username,
       first_name: tgUser.first_name,
       user_id: tgUser.user_id,
@@ -269,7 +272,7 @@ export class ClaimsApiService {
     return response.status;
   }
 
-  async returnClaim(claim, commentary, tgUser) {
+  async returnClaim(claimId, claimNo, commentary, tgUser) {
     const uuidOne = uuidV4();
 
     const requestConfig = {
@@ -283,8 +286,8 @@ export class ClaimsApiService {
     const data = {
       id: uuidOne,
       type: 'return',
-      claim_id: claim.id,
-      claim_no: claim.claim_no,
+      claim_id: claimId,
+      claim_no: claimNo,
       username: tgUser.username,
       first_name: tgUser.first_name,
       user_id: tgUser.user_id,

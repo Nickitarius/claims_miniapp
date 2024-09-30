@@ -37,17 +37,11 @@ export class ClaimsController {
 
   @Get('action/get_accounts')
   async getAccounts(
-    @Param() params: any,
     @Query('uid') uid,
     @Query('client_contract') clientContract,
   ) {
     try {
-      const claimNo = params.claim_no;
-      return await this.claimsApiService.getAccounts(
-        claimNo,
-        clientContract,
-        uid,
-      );
+      return await this.claimsApiService.getAccounts(clientContract, uid);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -58,7 +52,8 @@ export class ClaimsController {
     console.log('req');
     try {
       const status = await this.claimsApiService.takeWork(
-        body.claim,
+        body.claim_id,
+        body.claim_no,
         body.tg_user,
       );
       return res.status(status).send();
@@ -69,10 +64,12 @@ export class ClaimsController {
 
   @Post('action/senddefsms')
   async sendDefSMS(@Body() body, @Res() res: Response) {
-    console.log('req');
+    console.log('senddefsms');
     try {
       const status = await this.claimsApiService.sendDefSMS(
-        body.claim,
+        body.claim_id,
+        body.claim_no,
+        body.claim_phone,
         body.tg_user,
       );
       return res.status(status).send();
@@ -85,8 +82,10 @@ export class ClaimsController {
   async completeClaim(@Body() body, @Res() res: Response) {
     try {
       const status = await this.claimsApiService.completeClaim(
-        body.claim,
+        body.claim_id,
+        body.claim_no,
         body.commentary,
+        body.write_offs,
         body.tg_user,
       );
       return res.status(status).send();
@@ -99,7 +98,8 @@ export class ClaimsController {
   async addComment(@Body() body, @Res() res: Response) {
     try {
       const status = await this.claimsApiService.addComment(
-        body.claim,
+        body.claim_id,
+        body.claim_no,
         body.commentary,
         body.tg_user,
       );
@@ -113,7 +113,8 @@ export class ClaimsController {
   async returnClaim(@Body() body, @Res() res: Response) {
     try {
       const status = await this.claimsApiService.returnClaim(
-        body.claim,
+        body.claim_id,
+        body.claim_no,
         body.commentary,
         body.tg_user,
       );
