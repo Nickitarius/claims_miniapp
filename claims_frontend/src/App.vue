@@ -11,6 +11,8 @@ function changeTheme() {
 }
 onThemeChanged(changeTheme);
 
+console.log(import.meta.env.API_URL);
+
 onMounted(() => {
   changeTheme();
 });

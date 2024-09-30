@@ -10,7 +10,6 @@ export class AxiosConfig {
     this.axiosInstance = axios.create({
       baseURL: this.backendUrl,
       headers: {
-        // 'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       },
     });

@@ -7,7 +7,7 @@ import { ClaimsModule } from './claims/claims.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.dev.env',
+      envFilePath: '.env.local',
       isGlobal: true,
       cache: true,
     }),
