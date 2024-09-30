@@ -17,7 +17,6 @@ var writeOffs = ref(new Array<any>());
 var avilableConsumables = ref([]);
 
 function isNotEmptyRule(input: string) {
-  console.log(input.length);
   if (input.length > 0) {
     return true;
   } else {
@@ -52,6 +51,13 @@ function removeWriteOff(index) {
   writeOffs.value.splice(index, 1);
 }
 
+/** Ensures that each consumable can appear on the form only once. */
+function changeAvailableConsumables() {
+  const writeOffConsumables = writeOffs.value.map((a) => a.consumable);
+  const temp = consumables.value.filter((n) => !writeOffConsumables.includes(n));
+  avilableConsumables.value = temp;
+}
+
 onMounted(async () => {
   consumables.value = await ClaimsService.getConsumables(store.tgUser);
   avilableConsumables.value = consumables.value;
@@ -79,21 +85,24 @@ onMounted(async () => {
 
             <v-divider class="mt-2 mb-2"></v-divider>
 
-            <v-row v-for="(writeOff, index) in writeOffs" :key="writeOff['consumable']">
+            <h3 class="mb-3">Списание расходников</h3>
+
+            <v-row class="mb-n10" v-for="(writeOff, index) in writeOffs" :key="writeOff.consumable">
               <v-col>
                 <h5>Расходник</h5>
 
                 <v-autocomplete
-                  :items="consumables"
                   item-title="name"
+                  item-value="id"
                   label="Расходник"
                   density="compact"
-                  v-model="writeOff['consumableId']"
-                  item-value="id"
+                  :items="avilableConsumables"
+                  v-model="writeOff.consumable"
+                  return-object
                   required
                   :rules="[(v) => !!v || 'Обязательное поле']"
-                >
-                </v-autocomplete>
+                  @update:modelValue="changeAvailableConsumables()"
+                />
               </v-col>
 
               <v-col>
@@ -104,7 +113,7 @@ onMounted(async () => {
                   controlVariant="stacked"
                   type="number"
                   min="1"
-                  v-model="writeOff['quantity']"
+                  v-model="writeOff.quantity"
                 ></v-text-field>
               </v-col>
 
@@ -131,9 +140,9 @@ onMounted(async () => {
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn text="Отмена" @click="isShow = false" variant="plain"></v-btn>
+            <v-btn text="Отмена" @click="isShow = false" variant="plain" />
 
-            <v-btn color="primary" text="Сохранить" variant="tonal" type="submit"></v-btn>
+            <v-btn color="primary" text="Сохранить" variant="tonal" type="submit" />
           </v-card-actions>
         </v-card>
       </v-form>
