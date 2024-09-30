@@ -42,7 +42,6 @@ export class ClaimsController {
     @Query('client_contract') clientContract,
   ) {
     try {
-      console.log(uid, clientContract);
       const claimNo = params.claim_no;
       return await this.claimsApiService.getAccounts(
         claimNo,
@@ -64,7 +63,6 @@ export class ClaimsController {
       );
       return res.status(status).send();
     } catch (error) {
-      console.log('catch');
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -79,14 +77,12 @@ export class ClaimsController {
       );
       return res.status(status).send();
     } catch (error) {
-      console.log('catch');
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Post('action/complete')
   async completeClaim(@Body() body, @Res() res: Response) {
-    console.log('req');
     try {
       const status = await this.claimsApiService.completeClaim(
         body.claim,
@@ -95,14 +91,12 @@ export class ClaimsController {
       );
       return res.status(status).send();
     } catch (error) {
-      console.log('catch');
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Post('action/addcomment')
   async addComment(@Body() body, @Res() res: Response) {
-    console.log('req');
     try {
       const status = await this.claimsApiService.addComment(
         body.claim,
@@ -111,14 +105,12 @@ export class ClaimsController {
       );
       return res.status(status).send();
     } catch (error) {
-      console.log('catch');
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Post('action/return')
   async returnClaim(@Body() body, @Res() res: Response) {
-    console.log('req');
     try {
       const status = await this.claimsApiService.returnClaim(
         body.claim,
@@ -127,7 +119,15 @@ export class ClaimsController {
       );
       return res.status(status).send();
     } catch (error) {
-      console.log('catch');
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('action/get_consumables')
+  async getConsumables(@Query('uid') uid) {
+    try {
+      return await this.claimsApiService.getConsumables(uid);
+    } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

@@ -309,4 +309,35 @@ export class ClaimsApiService {
 
     return response.status;
   }
+
+  async getConsumables(uid) {
+    const uuidOne = uuidV4();
+
+    const requestConfig = {
+      auth: {
+        username: this.configService.get('API_USER'),
+        password: this.configService.get('API_PASS'),
+      },
+    };
+
+    const url = this.apiUrl + `/get_consumables?uid=${uid}`;
+
+    this.logger.log(`${uid} Request ${url}`);
+
+    const response = await firstValueFrom(
+      await this.httpService.get(url, requestConfig).pipe(
+        catchError((error: AxiosError) => {
+          const errText = ClaimsUtils.handleReqError(
+            error,
+            uuidOne,
+            uid,
+            this.logger,
+          );
+          throw errText;
+        }),
+      ),
+    );
+
+    return response.data;
+  }
 }

@@ -10,6 +10,9 @@ import { components, directives } from 'vuetify/dist/vuetify.js';
 import 'vuetify/dist/vuetify.min.css';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 
+// import '@mdi/font/css/materialdesignicons.css'
+// import 'vuetify/styles'
+
 const app = createApp(App);
 
 app.use(createPinia());
