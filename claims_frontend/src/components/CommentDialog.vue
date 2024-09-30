@@ -6,7 +6,7 @@ import { baseStore } from '../stores/base.store';
 const store = baseStore();
 const claim = defineModel('claim');
 const currentAction = defineModel('currentAction');
-const isShow = defineModel('isShow');
+const isShow = defineModel('isShow', { default: false });
 
 var isShowSnackbar = ref(false);
 var snackbarText = ref('');

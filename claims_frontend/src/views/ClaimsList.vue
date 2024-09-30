@@ -84,7 +84,7 @@ onMounted(async () => {
           <b>Комментарий к заявке: </b>{{ claim['comment'] }}<br />
           <b>Комментарий к работе: </b>{{ claim['work_commentary'] }}<br />
 
-          <div class="pa-3">
+          <div class="my-3">
             <v-btn size="large" block @click="$router.push({ path: `claim/${claim['claim_no']}` })"
               >К заявке</v-btn
             >
@@ -93,7 +93,7 @@ onMounted(async () => {
       </v-expansion-panel>
     </v-expansion-panels>
 
-    <div class="pa-6">
+    <div class="my-6">
       <v-pagination
         :length="paginator.pagesTotal"
         :total-visible="4"

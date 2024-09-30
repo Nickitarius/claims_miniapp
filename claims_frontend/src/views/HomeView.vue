@@ -11,7 +11,7 @@ onMounted(() => {});
     <h2>Добрый день, {{ tgUser.first_name }}!</h2>
 
     <v-btn
-      class="d-flex justify-center align-center"
+      class="d-flex justify-center align-center my-6"
       size="large"
       block
       @click="$router.push({ path: 'claims_list' })"

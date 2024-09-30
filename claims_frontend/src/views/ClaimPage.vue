@@ -93,7 +93,7 @@ async function getAccounts() {
       <b>Комментарий к заявке: </b>{{ claim['comment'] }}<br />
       <b>Комментарий к работе: </b>{{ claim['work_commentary'] }}<br />
 
-      <v-expansion-panels class="ma-1 mt-3" v-if="accounts">
+      <v-expansion-panels class="my-1 mt-3" v-if="accounts">
         <v-expansion-panel title="Логины и пароли">
           <v-expansion-panel-text>
             <div v-for="(account, index) in accounts" :key="index">
@@ -108,19 +108,19 @@ async function getAccounts() {
       ></v-expansion-panels>
     </v-sheet>
 
-    <div class="ma-3">
+    <div class="my-3">
       <v-col>
         <div v-if="isShowControlButtons">
-          <v-btn class="ma-3" size="large" block color="warning" @click="sendDefSMS()"
+          <v-btn class="my-3" size="large" block color="warning" @click="sendDefSMS()"
             >SMS о недозвоне</v-btn
           >
 
-          <v-btn class="ma-3" size="large" block color="info" @click="getAccounts()"
+          <v-btn class="my-3" size="large" block color="info" @click="getAccounts()"
             >Логин и пароль</v-btn
           >
 
           <v-btn
-            class="ma-3"
+            class="my-3"
             size="large"
             block
             color="secondary"
@@ -128,20 +128,20 @@ async function getAccounts() {
             >Добавить комментарий</v-btn
           >
 
-          <v-btn class="ma-3" size="large" block color="success" @click="closeClaim()"
+          <v-btn class="my-3" size="large" block color="success" @click="closeClaim()"
             >Закрыть заявку</v-btn
           >
 
-          <v-btn class="ma-3" size="large" block color="error" @click="addCommentary('return')"
+          <v-btn class="my-3" size="large" block color="error" @click="addCommentary('return')"
             >Вернуть заявку</v-btn
           >
         </div>
 
-        <v-btn class="ma-3" size="large" block @click="takeWork()" v-if="isShowTakeWorkButton"
+        <v-btn class="my-3" size="large" block @click="takeWork()" v-if="isShowTakeWorkButton"
           >В работу</v-btn
         >
         <v-btn
-          class="ma-3"
+          class="my-3"
           size="large"
           block
           @click="$router.push({ path: `/claims_list` })"
